@@ -21,3 +21,12 @@ _testmain.go
 
 *.exe
 *.test
+
+# for vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
