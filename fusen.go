@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"os"
-	"github.com/saiki/fusen/bookshelf"
+	"github.com/saiki/fusen/whiteboard"
 )
 
 
 func main() {
-	var note = new(bookshelf.Note).Init()
-	page := new(bookshelf.Page).Init()
-	pageIndex := note.AddPage(page)
-	fusen := bookshelf.NewFusen(0, 0, "#000000", "テスト")
-	note.AddFusen(fusen, pageIndex)
-	fmt.Printf("%q\n", os.Args)
+	var board = new(whiteboard.Whiteboard).Init()
+	fusen := whiteboard.NewFusen(0, 0, "#000000", "テスト")
+	board.Add(fusen)
+	fmt.Printf("%v\n", os.Args)
+	fmt.Printf("%v\n", board)
+	whiteboard.Export(board)
 }
