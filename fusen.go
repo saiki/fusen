@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"github.com/saiki/bookshelf"
+	"github.com/saiki/fusen/bookshelf"
 )
 
 
