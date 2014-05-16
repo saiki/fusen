@@ -3,8 +3,8 @@ package whiteboard
 import (
 	"bytes"
 	"encoding/gob"
-	"fmt"
 	"log"
+	"os"
 )
 
 type Fusen struct {
@@ -33,18 +33,36 @@ func (self *Whiteboard) Add(fusen *Fusen) int {
 	return next
 }
 
-func Export(whiteboard *Whiteboard) error {
-	var network bytes.Buffer
-	enc := gob.NewEncoder(&network)
-	err := enc.Encode(whiteboard)
+func (self *Whiteboard) Export(path string) error {
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	err := enc.Encode(self)
 	if  err != nil {
 		log.Fatalln("decode: ", err)
+		return err
 	}
-	fmt.Printf("network: %v\n", network)
+	os.Remove(path)
+	file, err := os.Create(path)
+	if err != nil {
+		log.Fatalln("create file: ", err)
+		return err
+	}
+	defer file.Close()
+	file.Write(buf.Bytes())
 	return nil
 }
 
-func Import(path string) (*Whiteboard, error) {
-
-	return nil, nil
+func (self *Whiteboard) Import (path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		log.Fatalln("open file:", err)
+		return err
+	}
+	dec := gob.NewDecoder(file)
+	err = dec.Decode(self)
+	if err != nil {
+		log.Fatalln("decode file:", err)
+		return err
+	}
+	return nil
 }
