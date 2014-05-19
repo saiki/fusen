@@ -1,18 +1,20 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"log"
 	"github.com/saiki/fusen/whiteboard"
+	"net/http"
 )
 
+var board *whiteboard.Whiteboard
+
+func init() {
+	board = new(whiteboard.Whiteboard).Init()
+	board.Import("./exported")
+}
 
 func main() {
-	var board = new(whiteboard.Whiteboard).Init()
-	board.Import(".\\exported")
-	fusen := whiteboard.NewFusen(0, 0, "#000000", "テスト")
-	board.Add(fusen)
-	fmt.Printf("%v\n", os.Args)
-	fmt.Printf("%v\n", board)
-	board.Export(".\\exported")
+	log.Println("start fusen...")
+	defer board.Export("./exported")
+	http.ListenAndServe(":8080", nil)
 }

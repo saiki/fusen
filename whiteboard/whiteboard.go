@@ -27,10 +27,18 @@ func (self *Whiteboard) Init() *Whiteboard {
 	return self
 }
 
-func (self *Whiteboard) Add(fusen *Fusen) int {
+func (self *Whiteboard) Add(fusen *Fusen) (int, error) {
 	next := len(self.Collection) + 1
 	self.Collection[next] = fusen
-	return next
+	return next, nil
+}
+
+func (self *Whiteboard) Modify(index int, fusen *Fusen) err error {
+	if self.Collection[index] == nil  {
+		log.Fatalln("not found.")
+	}
+	self.Collection[index] = fusen
+	return nil
 }
 
 func (self *Whiteboard) Export(path string) error {
@@ -53,6 +61,10 @@ func (self *Whiteboard) Export(path string) error {
 }
 
 func (self *Whiteboard) Import (path string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		log.Println("file does not exists.")
+		return nil
+	}
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalln("open file:", err)
