@@ -30,5 +30,5 @@ Session.vim
 .netrwhist
 *~
 
-# ignore binary
+# binary
 fusen
