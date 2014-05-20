@@ -8,13 +8,15 @@ import (
 
 var board *whiteboard.Whiteboard
 
+const exported = "~/.exported"
+
 func init() {
 	board = new(whiteboard.Whiteboard).Init()
-	board.Import("./exported")
+	board.Import(exported)
 }
 
 func main() {
 	log.Println("start fusen...")
-	defer board.Export("./exported")
+	defer board.Export(exported)
 	http.ListenAndServe(":8080", nil)
 }

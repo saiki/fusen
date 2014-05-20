@@ -3,6 +3,7 @@ package whiteboard
 import (
 	"bytes"
 	"encoding/gob"
+	"errors"
 	"log"
 	"os"
 )
@@ -33,9 +34,10 @@ func (self *Whiteboard) Add(fusen *Fusen) (int, error) {
 	return next, nil
 }
 
-func (self *Whiteboard) Modify(index int, fusen *Fusen) err error {
+func (self *Whiteboard) Modify(index int, fusen *Fusen) error {
 	if self.Collection[index] == nil  {
 		log.Fatalln("not found.")
+		errors.New("index not found.")
 	}
 	self.Collection[index] = fusen
 	return nil
