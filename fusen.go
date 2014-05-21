@@ -5,6 +5,8 @@ import (
 	"log"
 	"github.com/saiki/fusen/wall"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 var whiteboard *wall.Wall
@@ -20,9 +22,14 @@ func init() {
 
 func main() {
 	log.Println("start fusen...")
-	defer func() {
-		whiteboard.Export(exported)
-		log.Println("end fusen...")
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			log.Printf("end fusen: in signal.Notify. captured:%v\n", sig)
+			whiteboard.Export(exported)
+			os.Exit(2)
+		}
 	}()
 	http.ListenAndServe(":8080", nil)
 }
