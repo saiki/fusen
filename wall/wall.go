@@ -55,9 +55,16 @@ func (self *Wall) Export(path string) error {
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(self)
 	if  err != nil {
+		log.Printf("Encoder can't initialize.\n")
 		return err
 	}
-	os.Remove(path)
+	if _, err := os.Stat(path); os.IsExist(err) {
+		err := os.Remove(path)
+		if err != nil {
+			log.Printf("can't remove target file[%s]: %v\n", path, err)
+			return err
+		}
+	}
 	file, err := os.Create(path)
 	if err != nil {
 		log.Fatalln("create file: ", err)
