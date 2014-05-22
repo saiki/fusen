@@ -6,35 +6,38 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
 )
 
 type Fusen struct {
-	Left  int
-	Top   int
-	Color string
-	Body  string
+	Left   int
+	Top    int
+	Width  int
+	Height int
+	Color  string
+	Body   string
 }
 
-func NewFusen(left, top int, color, body string) *Fusen {
-	return &Fusen{Left: left, Top: top, Color: color, Body:body}
+func NewFusen(left, top, width, height int, color, body string) *Fusen {
+	return &Fusen{Left: left, Top: top, Width: width, Height: height, Color: color, Body:body}
 }
 
 type Wall struct {
-	Collection map[int]*Fusen
+	Collection map[string]*Fusen
 }
 
 func (self *Wall) Init() *Wall {
-	self.Collection = make(map[int]*Fusen)
+	self.Collection = make(map[string]*Fusen)
 	return self
 }
 
-func (self *Wall) Add(fusen *Fusen) (int, error) {
+func (self *Wall) Add(fusen *Fusen) (string, error) {
 	next := len(self.Collection) + 1
-	self.Collection[next] = fusen
-	return next, nil
+	self.Collection[strconv.Itoa(next)] = fusen
+	return strconv.Itoa(next), nil
 }
 
-func (self *Wall) Modify(index int, fusen *Fusen) error {
+func (self *Wall) Modify(index string, fusen *Fusen) error {
 	if _, exists := self.Collection[index]; !exists {
 		return errors.New("index not found.")
 	}
@@ -42,7 +45,7 @@ func (self *Wall) Modify(index int, fusen *Fusen) error {
 	return nil
 }
 
-func (self *Wall) Delete(index int) error {
+func (self *Wall) Delete(index string) error {
 	if _, exists := self.Collection[index]; !exists {
 		return errors.New("index not found.")
 	}
@@ -55,19 +58,16 @@ func (self *Wall) Export(path string) error {
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(self)
 	if  err != nil {
-		log.Printf("Encoder can't initialize.\n")
 		return err
 	}
 	if _, err := os.Stat(path); os.IsExist(err) {
 		err := os.Remove(path)
 		if err != nil {
-			log.Printf("can't remove target file[%s]: %v\n", path, err)
 			return err
 		}
 	}
 	file, err := os.Create(path)
 	if err != nil {
-		log.Fatalln("create file: ", err)
 		return err
 	}
 	defer file.Close()
@@ -82,13 +82,11 @@ func (self *Wall) Import (path string) error {
 	}
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatalln("open file:", err)
 		return err
 	}
 	dec := gob.NewDecoder(file)
 	err = dec.Decode(self)
 	if err != nil {
-		log.Fatalln("decode file:", err)
 		return err
 	}
 	return nil
