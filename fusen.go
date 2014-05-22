@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"github.com/saiki/fusen/wall"
@@ -22,8 +21,6 @@ func init() {
 		panic(fmt.Sprintf("%v\n", err))
 	}
 	whiteboard.Import(path)
-	http.Handle("/", http.FileServer(http.Dir("static")))
-	http.HandleFunc("/all", all)
 }
 
 func main() {
@@ -45,16 +42,6 @@ func main() {
 		}
 	}()
 	http.ListenAndServe(":8080", nil)
-}
-
-func all(w http.ResponseWriter, r *http.Request) {
-	js, err := json.Marshal(whiteboard)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }
 
 func getExportPath() (string, error) {
