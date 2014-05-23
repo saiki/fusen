@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/saiki/fusen/wall"
+	"github.com/saiki/petapeta/wall"
 	"net/http"
 )
 
