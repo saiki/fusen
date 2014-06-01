@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/saiki/petapeta/wall"
 	"net/http"
+	"strconv"
 )
 
 func init() {
@@ -31,23 +32,15 @@ func create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	index, err := whiteboard.Add(fusen)
+	_, err = whiteboard.Add(fusen)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	p := new(param)
-	p.index = index
-	p.fusen = fusen
-	js, err := json.Marshal(p)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	all(w, r)
 }
 
 type param struct {
-	index string
+	index int
 	fusen *wall.Fusen
 }
 
@@ -62,19 +55,17 @@ func update(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	js, err := json.Marshal(p)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	all(w, r)
 }
 
 func remove(w http.ResponseWriter, r *http.Request) {
-	index := r.PostForm.Get("index")
-	err := whiteboard.Delete(index)
+	index, err := strconv.Atoi(r.PostForm.Get("index"))
+	if ( err != nil ) {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	err = whiteboard.Delete(index)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	w.WriteHeader(200)
+	all(w, r)
 }

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"log"
 	"os"
-	"strconv"
 )
 
 type Fusen struct {
@@ -23,33 +22,37 @@ func NewFusen(left, top, width, height int, color, body string) *Fusen {
 }
 
 type Wall struct {
-	Collection map[string]*Fusen
+	Collection []*Fusen
 }
 
 func (self *Wall) Init() *Wall {
-	self.Collection = make(map[string]*Fusen)
+	self.Collection = make([]*Fusen, 0)
 	return self
 }
 
-func (self *Wall) Add(fusen *Fusen) (string, error) {
-	next := len(self.Collection) + 1
-	self.Collection[strconv.Itoa(next)] = fusen
-	return strconv.Itoa(next), nil
+func (self *Wall) Add(fusen *Fusen) (int, error) {
+	_ = append(self.Collection, fusen)
+	return len(self.Collection), nil
 }
 
-func (self *Wall) Modify(index string, fusen *Fusen) error {
-	if _, exists := self.Collection[index]; !exists {
-		return errors.New("index not found.")
+func (self *Wall) Modify(index int, fusen *Fusen) error {
+	length := len(self.Collection)
+	if length - index < 0 {
+		return errors.New("index out of bounds.")
 	}
 	self.Collection[index] = fusen
 	return nil
 }
 
-func (self *Wall) Delete(index string) error {
-	if _, exists := self.Collection[index]; !exists {
-		return errors.New("index not found.")
+func (self *Wall) Delete(index int) error {
+	length := len(self.Collection)
+	if length - index < 0 {
+		return errors.New("index out of bounds.")
 	}
-	delete(self.Collection, index)
+	self.Collection = append(self.Collection[:index], self.Collection[index+1:]...)
+	c := make([]*Fusen, len(self.Collection) - 1)
+	copy(c, self.Collection)
+	self.Collection = c
 	return nil
 }
 
