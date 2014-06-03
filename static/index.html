@@ -9,8 +9,10 @@
 	</head>
 	<body ng-controller="WallController">
 		<div id="wall" ng-dblclick="newOne()">
-			<div ng-repeat="fusen in collection" class="fusen" style="position: absolute; top:{{fusen.top}}; left: {{fusen.left}}; width: {{fusen.width}}; height: {{fusen.height}};" ng-blur="edit($index)" ng-focus="flush($index)">
+			<div ng-repeat="fusen in collection" class="fusen" style="position: absolute;" ng-style="{top:fusen.top, left:fusen.left, width:fusen.width, height:fusen.height}" ng-blur="edit($index)" ng-focus="flush($index)">
+
 				{{fusen.body}}
+				<textarea placeholder="input hear." ng-model="fusen.body" />
 			</div>
 		</div>
 	</body>
