@@ -3,7 +3,6 @@ var wallApp = angular.module('wallApp', []);
 wallApp.controller('WallController', function($scope, $http) {
 	$http.get("/all").success(function(data) {
 		$scope.collection = data.Collection;
-		console.log($scope.collection);
 	});
 
 	$scope.newOne = function() {
@@ -19,7 +18,6 @@ wallApp.controller('WallController', function($scope, $http) {
 	};
 
 	$scope.edit = function(index) {
-		console.log(index);
 		$scope.active = $scope.collection[index];
 	}
 
