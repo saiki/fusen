@@ -1,28 +1,44 @@
-var wallApp = angular.module('wallApp', []);
 
-wallApp.controller('WallController', function($scope, $http) {
-	$http.get("/all").success(function(data) {
-		$scope.collection = data.Collection;
+var ViewModel = function() {
+	var self = this;
+	self.collection = ko.observableArray();
+	$.getJSON("/all", function(data) {
+		for ( var i = 0; i < data.Collection.length; i++ ) {
+			var fusen = {
+				top: ko.observable(data.Collection[i].top),
+				left: ko.observable(data.Collection[i].left),
+				width: ko.observable(data.Collection[i].width),
+				height: ko.observable(data.Collection[i].height),
+				body: ko.observable(data.Collection[i].body),
+				color: ko.observable(data.Collection[i].color)
+			}
+			self.collection.push(fusen);
+		}
 	});
 
-	$scope.newOne = function() {
+	self.newOne = function() {
 		var added = {
-			top: 10,
-			left: 10,
-			width: 100,
-			height: 100,
-			body: 'input hear.'
+			top: ko.observable(10),
+			left: ko.observable(10),
+			width: ko.observable(100),
+			height: ko.observable(100),
+			body: ko.observable(''),
+			color: ko.observable("#FFFFFF")
 		};
-		var index = $scope.collection.push($scope.collection, [added]);
-		$scope.edit(index);
+		var index = self.collection.push(self.collection, added);
+		console.log(self.collection);
+		self.edit(index);
 	};
 
-	$scope.edit = function(index) {
-		$scope.active = $scope.collection[index];
+	self.edit = function(index) {
+		self.active = self.collection[index];
 	}
 
-	$scope.flush = function(index) {
+	self.flush = function(index) {
 		console.log(index);
 	}
 
-});
+};
+var vm = new ViewModel();
+
+ko.applyBindings(vm, document.body);

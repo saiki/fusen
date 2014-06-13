@@ -11,4 +11,5 @@ html,body {
 
 .fusen {
 	border: solid 1px;
+	position: absolute;
 }
