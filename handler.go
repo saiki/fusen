@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/saiki/petapeta/wall"
+//	"github.com/saiki/petapeta/wall"
+	"./wall"
 	"net/http"
 	"strconv"
 )

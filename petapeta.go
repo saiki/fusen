@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/saiki/petapeta/wall"
+//	"github.com/saiki/petapeta/wall"
+	"./wall"
 	"net/http"
 	"os"
 	"os/signal"
