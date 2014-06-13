@@ -1,3 +1,26 @@
+ko.bindingHandlers.droppable = {
+  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+   var $element = $(element);
+   $element.droppable({
+    accept: $(element).data('drop-accept'),
+    hoverClass: $(element).data('drop-hover-class'),
+    tolerance: 'pointer',
+    drop: function (e, ui) {
+     // reset position
+     ui.draggable.css({top: 0, left: 0});
+     // trigger event
+     ui.draggable.trigger('dropped', [viewModel, e, ui]);
+    }
+   });
+  },
+  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+   if (valueAccessor()) {
+    $(element).droppable('enable');
+   } else {
+    $(element).droppable('disable');
+   }
+  }
+};
 
 var ViewModel = function() {
 	var self = this;

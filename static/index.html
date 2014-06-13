@@ -5,12 +5,13 @@
 		<title>petapeta</title>
 		<link rel="stylesheet" href="/stylesheet/app.css">
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js"></script>
 		<script src="/javascript/app.js"></script>
 	</head>
 	<body>
-		<div id="wall" data-bind="foreach: collection, event: {dbclick: newOne}">
-			<div class="fusen" data-bind="event: {focus: $parent.edit, blur: $parent.flush}, style: {background: color, left: left, top, top, width: width, height: height}">
+	<div id="wall" data-bind="foreach: collection, event{ dblclick: newOne }">
+			<div class="fusen" data-bind="draggable: true, event: {focus: $parent.edit, blur: $parent.flush}, style: {background: $data.color, left: $data.left, top: $data.top, width: $data.width, height: $data.height}">
 				<input type="color" data-bind="value: color" />
 				<textarea placeholder="input hear." data-bind="value: body"></textarea>
 			</div>
