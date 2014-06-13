@@ -25,7 +25,7 @@ var ViewModel = function() {
 			body: ko.observable(''),
 			color: ko.observable("#FFFFFF")
 		};
-		var index = self.collection.push(self.collection, added);
+		var index = self.collection.push(added);
 		console.log(self.collection);
 		self.edit(index);
 	};
@@ -39,6 +39,6 @@ var ViewModel = function() {
 	}
 
 };
-var vm = new ViewModel();
-
-ko.applyBindings(vm, document.body);
+$(function() {
+	ko.applyBindings(new ViewModel());
+});
