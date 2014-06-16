@@ -4,24 +4,24 @@ import (
 	"fmt"
 	"log"
 //	"github.com/saiki/petapeta/wall"
-	"./wall"
+	"./model"
 	"net/http"
 	"os"
 	"os/signal"
 	"os/user"
 )
 
-var whiteboard *wall.Wall
+var collection *model.Collection
 
 const FILE_NAME = "exported"
 
 func init() {
-	whiteboard = new(wall.Wall).Init()
+	collection = new(model.Collection)
 	path, err := getExportPath()
 	if err != nil {
 		panic(fmt.Sprintf("%v\n", err))
 	}
-	whiteboard.Import(path)
+	collection.Import(path)
 }
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 			if err != nil {
 				panic(fmt.Sprintf("%v\n", err))
 			}
-			err = whiteboard.Export(path)
+			err = collection.Export(path)
 			if err != nil {
 				log.Fatalf("Export error: %v\n", err)
 			}

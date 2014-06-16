@@ -1,4 +1,4 @@
-package wall
+package model
 
 import (
 	"bytes"
@@ -17,46 +17,40 @@ type Fusen struct {
 	Body   string
 }
 
-func NewFusen(left, top, width, height int, color, body string) *Fusen {
-	return &Fusen{Left: left, Top: top, Width: width, Height: height, Color: color, Body:body}
+func NewFusen(left, top, width, height int, color, body string) Fusen {
+	return Fusen{Left: left, Top: top, Width: width, Height: height, Color: color, Body:body}
 }
 
-type Wall struct {
-	Collection []*Fusen
+type Collection []Fusen
+
+
+func (self *Collection) Add(fusen *Fusen) (int, error) {
+	_ = append(*self, *fusen)
+	return len(*self), nil
 }
 
-func (self *Wall) Init() *Wall {
-	self.Collection = make([]*Fusen, 0)
-	return self
-}
-
-func (self *Wall) Add(fusen *Fusen) (int, error) {
-	_ = append(self.Collection, fusen)
-	return len(self.Collection), nil
-}
-
-func (self *Wall) Modify(index int, fusen *Fusen) error {
-	length := len(self.Collection)
+func (self *Collection) Modify(index int, fusen *Fusen) error {
+	length := len(*self)
 	if length - index < 0 {
 		return errors.New("index out of bounds.")
 	}
-	self.Collection[index] = fusen
+	(*self)[index] = *fusen
 	return nil
 }
 
-func (self *Wall) Delete(index int) error {
-	length := len(self.Collection)
+func (self *Collection) Delete(index int) error {
+	length := len(*self)
 	if length - index < 0 {
 		return errors.New("index out of bounds.")
 	}
-	self.Collection = append(self.Collection[:index], self.Collection[index+1:]...)
-	c := make([]*Fusen, len(self.Collection) - 1)
-	copy(c, self.Collection)
-	self.Collection = c
+	*self = append((*self)[:index], (*self)[index+1:]...)
+	c := make(Collection, len(*self) - 1)
+	copy(c, *self)
+	self = &c
 	return nil
 }
 
-func (self *Wall) Export(path string) error {
+func (self *Collection) Export(path string) error {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(self)
@@ -78,7 +72,7 @@ func (self *Wall) Export(path string) error {
 	return nil
 }
 
-func (self *Wall) Import (path string) error {
+func (self *Collection) Import (path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		log.Println("file does not exists.")
 		return nil

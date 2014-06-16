@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 //	"github.com/saiki/petapeta/wall"
-	"./wall"
+	"./model"
 	"net/http"
 	"strconv"
 )
@@ -17,7 +17,7 @@ func init() {
 }
 
 func all(w http.ResponseWriter, r *http.Request) {
-	js, err := json.Marshal(whiteboard)
+	js, err := json.Marshal(collection)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -28,12 +28,12 @@ func all(w http.ResponseWriter, r *http.Request) {
 
 func create(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	fusen := new(wall.Fusen)
+	fusen := new(model.Fusen)
 	err := decoder.Decode(fusen)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	_, err = whiteboard.Add(fusen)
+	_, err = collection.Add(fusen)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -42,7 +42,7 @@ func create(w http.ResponseWriter, r *http.Request) {
 
 type param struct {
 	index int
-	fusen *wall.Fusen
+	fusen *model.Fusen
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +52,7 @@ func update(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	err = whiteboard.Modify(p.index, p.fusen)
+	err = collection.Modify(p.index, p.fusen)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -64,7 +64,7 @@ func remove(w http.ResponseWriter, r *http.Request) {
 	if ( err != nil ) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	err = whiteboard.Delete(index)
+	err = collection.Delete(index)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
