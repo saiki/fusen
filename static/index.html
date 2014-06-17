@@ -20,14 +20,14 @@
 			<div class="fusen" data-bind="draggable: true, resizable: true, event: {focus: $parent.edit, blur: $parent.flush}, style: {background: color, left: left, top: $data.top, width: width, height: $data.height}">
 				<p>
 					<span style="float: left;">
-						<input type="hidden" data-bind="value: color, colorpicker: true" />
+						<input type="color" data-bind="value: color, colorpicker: true" />
 					</span>
 					<span style="float: right;">
 						<a class="close" href="#">x</a>
 					</span>
 					<span style="clear: both;"></span>
 				</p>
-				<textarea placeholder="input hear." data-bind="value: body"></textarea>
+				<textarea placeholder="input hear." style="width: 99%;" data-bind="value: body"></textarea>
 			</div>
 		</div>
 	</body>
