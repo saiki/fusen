@@ -1,24 +1,39 @@
-ko.bindingHandlers.droppable = {
+ko.bindingHandlers.draggable = {
   init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-   var $element = $(element);
-   $element.droppable({
-    accept: $(element).data('drop-accept'),
-    hoverClass: $(element).data('drop-hover-class'),
-    tolerance: 'pointer',
-    drop: function (e, ui) {
-     // reset position
-     ui.draggable.css({top: 0, left: 0});
-     // trigger event
-     ui.draggable.trigger('dropped', [viewModel, e, ui]);
-    }
-   });
+   $(element).draggable();
   },
   update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
    if (valueAccessor()) {
-    $(element).droppable('enable');
+    $(element).draggable('enable');
    } else {
-    $(element).droppable('disable');
+    $(element).draggable('disable');
    }
+  }
+};
+
+ko.bindingHandlers.resizable = {
+  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+   $(element).resizable();
+  },
+  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+   if (valueAccessor()) {
+    $(element).resizable('enable');
+   } else {
+    $(element).resizable('disable');
+   }
+  }
+};
+
+ko.bindingHandlers.colorpicker = {
+  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+   $(element).tinycolorpicker();
+//  },
+//  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+//   if (valueAccessor()) {
+//    $(element).resizable('enable');
+//   } else {
+//    $(element).resizable('disable');
+//   }
   }
 };
 
@@ -49,7 +64,6 @@ var ViewModel = function() {
 			color: ko.observable("#FFFFFF")
 		};
 		var index = self.collection.push(added);
-		console.log(self.collection);
 		self.edit(index);
 	};
 
