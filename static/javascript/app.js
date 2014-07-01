@@ -24,23 +24,13 @@ ko.bindingHandlers.resizable = {
   }
 };
 
-ko.bindingHandlers.colorpicker = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-   $(element).tinycolorpicker();
-//  },
-//  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-//   if (valueAccessor()) {
-//    $(element).resizable('enable');
-//   } else {
-//    $(element).resizable('disable');
-//   }
-  }
-};
-
 var ViewModel = function() {
 	var self = this;
 	self.collection = ko.observableArray();
 	$.getJSON("/all", function(data) {
+		if ( data == null || data.Collection == null ) {
+			return;
+		}
 		for ( var i = 0; i < data.Collection.length; i++ ) {
 			var fusen = {
 				top: ko.observable(data.Collection[i].top),
@@ -54,16 +44,20 @@ var ViewModel = function() {
 		}
 	});
 
-	self.newOne = function() {
+	self.newOne = function(event) {
+		console.log("newOne");
+		console.log(event);
 		var added = {
-			top: ko.observable(10),
-			left: ko.observable(10),
-			width: ko.observable(100),
-			height: ko.observable(100),
+			top: ko.observable(event.clientY),
+			left: ko.observable(event.clientX),
+			width: ko.observable(200),
+			height: ko.observable(300),
 			body: ko.observable(''),
 			color: ko.observable("#FFFFFF")
 		};
 		var index = self.collection.push(added);
+		console.log(index);
+		console.log(self.collection());
 		self.edit(index);
 	};
 
@@ -75,7 +69,18 @@ var ViewModel = function() {
 		console.log(index);
 	}
 
+	self.remove = function(data) {
+		if ( event.target == "#document" ) {
+			return;
+		}
+		console.log("remove start.");
+		var removed = self.collection.remove(data);
+		console.log(removed);
+		console.log("remove end.");
+	}
+
 };
 $(function() {
-	ko.applyBindings(new ViewModel());
+	var vm = new ViewModel();
+	ko.applyBindings(vm);
 });

@@ -2,7 +2,6 @@ html,body {
 	height: 100%;
 }
 
-
 #wall {
 	height: 100%;
 	width: 100%;
@@ -12,4 +11,8 @@ html,body {
 .fusen {
 	border: solid 1px;
 	position: absolute;
+}
+
+.fusen textarea {
+	resize: none;
 }
