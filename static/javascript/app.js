@@ -27,7 +27,7 @@ ko.bindingHandlers.resizable = {
 var ViewModel = function() {
 	var self = this;
 	self.collection = ko.observableArray();
-	$.getJSON("/all", function(data) {
+	self.load = function(data) {
 		if ( data == null || data.Collection == null ) {
 			return;
 		}
@@ -42,11 +42,15 @@ var ViewModel = function() {
 			}
 			self.collection.push(fusen);
 		}
+	}
+	$.getJSON("/all", function(data) {
+		self.load(data);
 	});
 
 	self.newOne = function(event) {
-		console.log("newOne");
-		console.log(event);
+		if ( event.target == "#document" ) {
+			return;
+		}
 		var added = {
 			top: ko.observable(event.clientY),
 			left: ko.observable(event.clientX),
@@ -57,16 +61,14 @@ var ViewModel = function() {
 		};
 		var index = self.collection.push(added);
 		console.log(index);
-		console.log(self.collection());
-		self.edit(index);
 	};
 
-	self.edit = function(index) {
-		self.active = self.collection[index];
-	}
-
 	self.flush = function(index) {
-		console.log(index);
+		var fusen = self.collection[index];
+		$.post("/update", fusen, function(data) {
+			self.collection.removeAll();
+			self.load(data);
+		});
 	}
 
 	self.remove = function(data) {

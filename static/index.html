@@ -16,16 +16,16 @@
 	</head>
 	<body data-bind="event: { dblclick: newOne(event) }">
 	<div id="wall" data-bind="foreach: collection">
-			<div class="fusen" data-bind="draggable: true, resizable: true, event: {focus: $root.edit, blur: $root.flush}, style: {background: color, left: left, top: top, width: width, height: height}">
+			<div class="fusen" data-bind="draggable: true, resizable: true, style: {background: color, left: left, top: top, width: width, height: height}">
 				<span style="float: left;">
-					<input type="color" data-bind="value: color" />
+					<input type="color" data-bind="value: color, event: {blur: $root.flush}" />
 				</span>
 				<span style="float: right;">
 					<input type="button" class="close" data-bind="click: $root.remove" value="x"/>
 				</span>
 				<span style="clear: both;"></span>
 				<div style="width: 100%; height: 100%;">
-					<textarea placeholder="input hear." style="width: 99%; height: 99%;" data-bind="value: body"></textarea>
+					<textarea placeholder="input hear." style="width: 99%; height: 99%;" data-bind="value: body, event: {blur: $root.flush}"></textarea>
 				</div>
 			</div>
 		</div>
