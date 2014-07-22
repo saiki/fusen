@@ -9,6 +9,7 @@ import (
 )
 
 type Fusen struct {
+	Hash   string
 	Left   int
 	Top    int
 	Width  int
@@ -17,12 +18,11 @@ type Fusen struct {
 	Body   string
 }
 
-func NewFusen(left, top, width, height int, color, body string) Fusen {
-	return Fusen{Left: left, Top: top, Width: width, Height: height, Color: color, Body:body}
-}
-
 type Collection []Fusen
 
+func NewFusen(left, top, width, height int, color, body string) Fusen {
+	return Fusen{Left: left, Top: top, Width: width, Height: height, Color: color, Body: body}
+}
 
 func (self *Collection) Add(fusen *Fusen) (int, error) {
 	_ = append(*self, *fusen)
@@ -31,7 +31,7 @@ func (self *Collection) Add(fusen *Fusen) (int, error) {
 
 func (self *Collection) Modify(index int, fusen *Fusen) error {
 	length := len(*self)
-	if length - index < 0 {
+	if length-index < 0 {
 		return errors.New("index out of bounds.")
 	}
 	(*self)[index] = *fusen
@@ -40,11 +40,11 @@ func (self *Collection) Modify(index int, fusen *Fusen) error {
 
 func (self *Collection) Delete(index int) error {
 	length := len(*self)
-	if length - index < 0 {
+	if length-index < 0 {
 		return errors.New("index out of bounds.")
 	}
 	*self = append((*self)[:index], (*self)[index+1:]...)
-	c := make(Collection, len(*self) - 1)
+	c := make(Collection, len(*self)-1)
 	copy(c, *self)
 	self = &c
 	return nil
@@ -54,7 +54,7 @@ func (self *Collection) Export(path string) error {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(self)
-	if  err != nil {
+	if err != nil {
 		return err
 	}
 	if _, err := os.Stat(path); os.IsExist(err) {
@@ -72,7 +72,7 @@ func (self *Collection) Export(path string) error {
 	return nil
 }
 
-func (self *Collection) Import (path string) error {
+func (self *Collection) Import(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		log.Println("file does not exists.")
 		return nil
