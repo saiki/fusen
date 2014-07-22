@@ -6,7 +6,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min.js"></script>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -15,7 +15,7 @@
 		<script src="/javascript/app.js"></script>
 	</head>
 	<body data-bind="event: { dblclick: newOne(event) }">
-	<div id="wall" data-bind="foreach: collection">
+	<div id="wall" data-bind="foreach: {data: collection, afterRender: moveToClick}">
 			<div class="fusen" data-bind="draggable: true, resizable: true, style: {background: color, left: left, top: top, width: width, height: height}">
 				<span style="float: left;">
 					<input type="color" data-bind="value: color, event: {blur: $root.flush}" />

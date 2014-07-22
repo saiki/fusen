@@ -47,20 +47,22 @@ var ViewModel = function() {
 		self.load(data);
 	});
 
-	self.newOne = function(event) {
+	self.newOne = function(ev) {
 		if ( event.target == "#document" ) {
 			return;
 		}
-		var added = {
-			top: ko.observable(event.clientY),
-			left: ko.observable(event.clientX),
+		var x = ( event != null ) ? event.clientX : 10;
+		var y = ( event != null ) ? event.clientY : 10;
+		var pushed = {
+			top: ko.observable(y),
+			left: ko.observable(x),
 			width: ko.observable(200),
 			height: ko.observable(300),
 			body: ko.observable(''),
 			color: ko.observable("#FFFFFF")
 		};
-		var index = self.collection.push(added);
-		console.log(index);
+		var index = self.collection.push(pushed);
+		console.log("pushed index = " + index);
 	};
 
 	self.flush = function(index) {
@@ -79,6 +81,10 @@ var ViewModel = function() {
 		var removed = self.collection.remove(data);
 		console.log(removed);
 		console.log("remove end.");
+	}
+
+	self.moveToClick = function(element, data) {
+		$(element).css({'top': data.top(), 'left': data.left()});
 	}
 
 };
