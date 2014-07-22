@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-//	"github.com/saiki/petapeta/wall"
-	"./model"
 	"net/http"
 	"strconv"
+
+	"github.com/saiki/petapeta/model"
 )
 
 func init() {
@@ -61,7 +61,7 @@ func update(w http.ResponseWriter, r *http.Request) {
 
 func remove(w http.ResponseWriter, r *http.Request) {
 	index, err := strconv.Atoi(r.PostForm.Get("index"))
-	if ( err != nil ) {
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	err = collection.Delete(index)
