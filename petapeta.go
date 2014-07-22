@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-//	"github.com/saiki/petapeta/wall"
-	"./model"
 	"net/http"
 	"os"
 	"os/signal"
 	"os/user"
+
+	"github.com/saiki/petapeta/model"
 )
 
 var collection *model.Collection
