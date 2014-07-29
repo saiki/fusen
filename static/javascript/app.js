@@ -47,22 +47,24 @@ var ViewModel = function() {
 		self.load(data);
 	});
 
-	self.newOne = function(ev) {
-		if ( event.target == "#document" ) {
+	self.newOne = function(obj, ev) {
+		if ( ! ev ) {
+			ev = event;
+		}
+		if ( ev.target == "#document" ) {
 			return;
 		}
-		var x = ( event != null ) ? event.clientX : 10;
-		var y = ( event != null ) ? event.clientY : 10;
+		var x = ( ev != null ) ? ev.clientX : 10;
+		var y = ( ev != null ) ? ev.clientY : 10;
 		var pushed = {
 			top: ko.observable(y),
 			left: ko.observable(x),
 			width: ko.observable(200),
-			height: ko.observable(300),
+			height: ko.observable(100),
 			body: ko.observable(''),
 			color: ko.observable("#FFFFFF")
 		};
 		var index = self.collection.push(pushed);
-		console.log("pushed index = " + index);
 	};
 
 	self.flush = function(index) {
@@ -73,7 +75,7 @@ var ViewModel = function() {
 		});
 	}
 
-	self.remove = function(data) {
+	self.remove = function(data, event) {
 		if ( event.target == "#document" ) {
 			return;
 		}
@@ -84,7 +86,12 @@ var ViewModel = function() {
 	}
 
 	self.moveToClick = function(element, data) {
-		$(element).css({'top': data.top(), 'left': data.left()});
+		$(element).css({
+			'top'    : data.top(),
+			'left'   : data.left(),
+			'width'  : data.width(),
+			'height' : data.height()
+		});
 	}
 
 };
