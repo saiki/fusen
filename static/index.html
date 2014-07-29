@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="/stylesheet/app.css">
 		<script src="/javascript/app.js"></script>
 	</head>
-	<body data-bind="event: { dblclick: newOne(event) }">
+	<body data-bind="event: { dblclick: newOne }">
 	<div id="wall" data-bind="foreach: {data: collection, afterRender: moveToClick}">
 			<div class="fusen" data-bind="draggable: true, resizable: true, style: {background: color, left: left, top: top, width: width, height: height}">
 				<span style="float: left;">
